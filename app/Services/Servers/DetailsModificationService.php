@@ -94,10 +94,10 @@ class DetailsModificationService
         }
 
         $this->connection->beginTransaction();
-        $this->repository->withoutFresh()->update($server->id, [
-            'owner_id' => array_get($data, 'owner_id') ?? $server->owner_id,
-            'name' => array_get($data, 'name') ?? $server->name,
-            'description' => array_get($data, 'description') ?? $server->description,
+        $this->repository->withoutFreshModel()->update($server->id, [
+            'owner_id' => array_get($data, 'owner_id'),
+            'name' => array_get($data, 'name'),
+            'description' => array_get($data, 'description', ''),
         ], true, true);
 
         if (array_get($data, 'owner_id') != $server->owner_id) {
@@ -125,10 +125,10 @@ class DetailsModificationService
         }
 
         $this->connection->beginTransaction();
-        $this->repository->withoutFresh()->update($server->id, ['image' => $image]);
+        $this->repository->withoutFreshModel()->update($server->id, ['image' => $image]);
 
         try {
-            $this->daemonServerRepository->setNode($server->node_id)->setAccessServer($server->uuid)->update([
+            $this->daemonServerRepository->setServer($server)->update([
                 'build' => [
                     'image' => $image,
                 ],

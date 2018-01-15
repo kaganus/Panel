@@ -1,11 +1,4 @@
 <?php
-/**
- * Pterodactyl - Panel
- * Copyright (c) 2015 - 2017 Dane Everitt <dane@daneeveritt.com>.
- *
- * This software is licensed under the terms of the MIT license.
- * https://opensource.org/licenses/MIT
- */
 
 namespace Pterodactyl\Models;
 
@@ -34,6 +27,11 @@ class User extends Model implements
 
     const USER_LEVEL_USER = 0;
     const USER_LEVEL_ADMIN = 1;
+
+    const FILTER_LEVEL_ALL = 0;
+    const FILTER_LEVEL_OWNER = 1;
+    const FILTER_LEVEL_ADMIN = 2;
+    const FILTER_LEVEL_SUBUSER = 3;
 
     /**
      * Level of servers to display when using access() on a user.
@@ -122,11 +120,14 @@ class User extends Model implements
      * @var array
      */
     protected static $applicationRules = [
+        'uuid' => 'required',
         'email' => 'required',
         'username' => 'required',
         'name_first' => 'required',
         'name_last' => 'required',
         'password' => 'sometimes',
+        'language' => 'sometimes',
+        'use_totp' => 'sometimes',
     ];
 
     /**
@@ -135,6 +136,7 @@ class User extends Model implements
      * @var array
      */
     protected static $dataIntegrityRules = [
+        'uuid' => 'string|size:36|unique:users,uuid',
         'email' => 'email|unique:users,email',
         'username' => 'alpha_dash|between:1,255|unique:users,username',
         'name_first' => 'string|between:1,255',

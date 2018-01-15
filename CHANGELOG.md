@@ -3,6 +3,26 @@ This file is a running track of new features and fixes to each version of the pa
 
 This project follows [Semantic Versioning](http://semver.org) guidelines.
 
+## v0.7.0-beta.4 (Derelict Dermodactylus)
+### Fixed
+* `[beta.3]` — Fixes a bug with the default environment file that was causing an inability to perform a fresh install when running package discovery.
+* `[beta.3]` — Fixes an edge case caused by the Laravel 5.5 upgrade that would try to perform an in_array check aganist a null value.
+* `[beta.3]` — Fixes a bug that would cause an error when attempting to create a new user on the Panel.
+* `[beta.3]` — Fixes error handling of the settings service provider when no migrations have been run.
+* `[beta.3]` — Fixes validation error when trying to use 'None' as the 'Copy Script From' option for an egg script.
+* Fixes a design bug in the database that prevented the storage of negative numbers, thus preventing a server from being assigned unlimited swap.
+* Fixes a bug where the 'Assign New Allocations' box would only show IPs that were present in the current pagination block.
+
+### Added
+* Nest and Egg listings now show the associated ID in order to make API requests easier.
+
+### Changed
+* Changed behavior of allocation IP Address/Ports box to automatically store the value entered if a user unfocuses the field without hitting space.
+* Changed order in which allocations are displayed to prioritize those with servers attached (in ascending IP & port order) followed by ascending IP & port order where no server is attached.
+
+### Removed
+* OOM exceptions can no longer be disabled on servers due to a startling number of users that were using it to avoid allocating proper amounts of resources to servers.
+
 ## v0.7.0-beta.3 (Derelict Dermodactylus)
 ### Fixed
 * `[beta.2]` — Fixes a bug that would cause an endless exception message stream in the console when attemping to setup environment settings in certain instances.

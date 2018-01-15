@@ -1,11 +1,4 @@
 <?php
-/**
- * Pterodactyl - Panel
- * Copyright (c) 2015 - 2017 Dane Everitt <dane@daneeveritt.com>.
- *
- * This software is licensed under the terms of the MIT license.
- * https://opensource.org/licenses/MIT
- */
 
 namespace Tests\Unit\Services\Eggs\Variables;
 
@@ -52,7 +45,7 @@ class VariableUpdateServiceTest extends TestCase
      */
     public function testVariableIsUpdatedWhenNoEnvironmentVariableIsPassed()
     {
-        $this->repository->shouldReceive('withoutFresh')->withNoArgs()->once()->andReturnSelf()
+        $this->repository->shouldReceive('withoutFreshModel')->withNoArgs()->once()->andReturnSelf()
             ->shouldReceive('update')->with($this->model->id, [
                 'user_viewable' => false,
                 'user_editable' => false,
@@ -68,7 +61,7 @@ class VariableUpdateServiceTest extends TestCase
     public function testVariableIdCanBePassedInPlaceOfModel()
     {
         $this->repository->shouldReceive('find')->with($this->model->id)->once()->andReturn($this->model);
-        $this->repository->shouldReceive('withoutFresh')->withNoArgs()->once()->andReturnSelf()
+        $this->repository->shouldReceive('withoutFreshModel')->withNoArgs()->once()->andReturnSelf()
             ->shouldReceive('update')->with($this->model->id, [
                 'user_viewable' => false,
                 'user_editable' => false,
@@ -83,14 +76,14 @@ class VariableUpdateServiceTest extends TestCase
      */
     public function testVariableIsUpdatedWhenValidEnvironmentVariableIsPassed()
     {
-        $this->repository->shouldReceive('withColumns')->with('id')->once()->andReturnSelf()
+        $this->repository->shouldReceive('setColumns')->with('id')->once()->andReturnSelf()
             ->shouldReceive('findCountWhere')->with([
                 ['env_variable', '=', 'TEST_VAR_123'],
                 ['egg_id', '=', $this->model->option_id],
                 ['id', '!=', $this->model->id],
             ])->once()->andReturn(0);
 
-        $this->repository->shouldReceive('withoutFresh')->withNoArgs()->once()->andReturnSelf()
+        $this->repository->shouldReceive('withoutFreshModel')->withNoArgs()->once()->andReturnSelf()
             ->shouldReceive('update')->with($this->model->id, [
                 'user_viewable' => false,
                 'user_editable' => false,
@@ -101,18 +94,36 @@ class VariableUpdateServiceTest extends TestCase
     }
 
     /**
+     * Test that an empty (null) value passed in the option key is handled
+     * properly as an array.
+     *
+     * @see https://github.com/Pterodactyl/Panel/issues/841
+     */
+    public function testNullOptionValueIsPassedAsArray()
+    {
+        $this->repository->shouldReceive('withoutFreshModel')->withNoArgs()->once()->andReturnSelf()
+            ->shouldReceive('update')->with($this->model->id, [
+                'user_viewable' => false,
+                'user_editable' => false,
+                'options' => null,
+            ])->once()->andReturn(true);
+
+        $this->assertTrue($this->service->handle($this->model, ['options' => null]));
+    }
+
+    /**
      * Test that data passed into the handler is overwritten inside the handler.
      */
     public function testDataPassedIntoHandlerTakesLowerPriorityThanDataSet()
     {
-        $this->repository->shouldReceive('withColumns')->with('id')->once()->andReturnSelf()
+        $this->repository->shouldReceive('setColumns')->with('id')->once()->andReturnSelf()
             ->shouldReceive('findCountWhere')->with([
                 ['env_variable', '=', 'TEST_VAR_123'],
                 ['egg_id', '=', $this->model->option_id],
                 ['id', '!=', $this->model->id],
             ])->once()->andReturn(0);
 
-        $this->repository->shouldReceive('withoutFresh')->withNoArgs()->once()->andReturnSelf()
+        $this->repository->shouldReceive('withoutFreshModel')->withNoArgs()->once()->andReturnSelf()
             ->shouldReceive('update')->with($this->model->id, [
                 'user_viewable' => false,
                 'user_editable' => false,
@@ -127,7 +138,7 @@ class VariableUpdateServiceTest extends TestCase
      */
     public function testExceptionIsThrownIfEnvironmentVariableIsNotUnique()
     {
-        $this->repository->shouldReceive('withColumns')->with('id')->once()->andReturnSelf()
+        $this->repository->shouldReceive('setColumns')->with('id')->once()->andReturnSelf()
             ->shouldReceive('findCountWhere')->with([
                 ['env_variable', '=', 'TEST_VAR_123'],
                 ['egg_id', '=', $this->model->option_id],
