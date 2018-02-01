@@ -71,7 +71,7 @@ class FileManager {
             swal({
                 type: 'error',
                 title: i18n.js.common.whoops,
-                text: jqXHR.responseJSON.error || i18n.js.common.error,
+                text: jqXHR.responseJSON.errors[0].detail || i18n.js.common.error,
             });
             console.error(jqXHR);
         });

@@ -86,6 +86,11 @@
                                 <i class="fa fa-wrench"></i> <span>Ayarlar</span>
                             </a>
                         </li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.api') ?: 'active' }}">
+                            <a href="{{ route('admin.api.index')}}">
+                                <i class="fa fa-gamepad"></i> <span>Application API</span>
+                            </a>
+                        </li>
                         <li class="header">PANEL YÖNETİMİ</li>
                         <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.databases') ?: 'active' }}">
                             <a href="{{ route('admin.databases') }}">
