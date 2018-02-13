@@ -237,7 +237,7 @@ return [
         'header' => 'Dosya Yöneticisi',
         'header_sub' => 'Web üzerinden tüm dosyalarını yönetin.',
         'loading' => 'Dosya yapısı ilk kez yükleniyor, bu işlem bir kaç saniye sürebilir.',
-        'path' => 'Webden dosya yöneticisi ile en fazla :size boyutunda dosya yükleyebilirsiniz. Daha büyük dosyalar için lütfen SFTP (FileZilla) kullanın. Dosyalarınızın sunucu üzerinde bulunduğu dizin: :path',
+        'path' => 'Webden dosya yöneticisi ile en fazla :size boyutunda dosya yükleyebilirsiniz. Daha büyük dosyalar için lütfen destek talebi açın. Dosyalarınızın sunucu üzerinde bulunduğu dizin: :path',
         'seconds_ago' => 'saniye önce',
         'file_name' => 'Dosya Adı',
         'size' => 'Boyut',
