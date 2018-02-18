@@ -189,7 +189,7 @@
                                     </a>
                                 </li>
                             @endcan
-                            @if(Gate::allows('view-startup', $server) || Gate::allows('view-sftp', $server) ||  Gate::allows('view-allocation', $server))
+                            @if(Gate::allows('view-startup', $server) || Gate::allows('access-sftp', $server) ||  Gate::allows('view-allocation', $server))
                                 <li class="treeview
                                     @if(starts_with(Route::currentRouteName(), 'server.settings'))
                                         active
@@ -206,7 +206,7 @@
                                         @can('view-allocation', $server)
                                             <li class="{{ Route::currentRouteName() !== 'server.settings.allocation' ?: 'active' }}"><a href="{{ route('server.settings.allocation', $server->uuidShort) }}"><i class="fa fa-handshake-o"></i> @lang('navigation.server.port_allocations')</a></li>
                                         @endcan
-                                        @can('view-sftp', $server)
+                                        @can('access-sftp', $server)
                                             <li class="{{ Route::currentRouteName() !== 'server.settings.sftp' ?: 'active' }}"><a href="{{ route('server.settings.sftp', $server->uuidShort) }}"><i class="fa fa-upload"></i> @lang('navigation.server.sftp_settings')</a></li>
                                         @endcan
                                         @can('view-startup', $server)
@@ -263,34 +263,6 @@
                 </div>
                 <a href="https://www.oyunhost.net/">oyunhost.net</a> &copy; {{ date('Y') }}
             </footer>
-            <aside class="control-sidebar control-sidebar-dark">
-                <div class="tab-content">
-                    <ul class="control-sidebar-menu">
-                        {{-- @todo replace this with better logic, or just remove it entirely? --}}
-                        {{--@foreach (Auth::user()->access(null)->get() as $s)--}}
-                            {{--<li>--}}
-                                {{--<a--}}
-                                    {{--@if(isset($server) && isset($node))--}}
-                                        {{--@if($server->uuidShort === $s->uuidShort)--}}
-                                            {{--class="active"--}}
-                                        {{--@endif--}}
-                                    {{--@endif--}}
-                                {{--href="{{ route('server.index', $s->uuidShort) }}">--}}
-                                    {{--@if($s->owner_id === Auth::user()->id)--}}
-                                        {{--<i class="menu-icon fa fa-user bg-blue"></i>--}}
-                                    {{--@else--}}
-                                        {{--<i class="menu-icon fa fa-user-o bg-gray"></i>--}}
-                                    {{--@endif--}}
-                                    {{--<div class="menu-info">--}}
-                                        {{--<h4 class="control-sidebar-subheading">{{ $s->name }}</h4>--}}
-                                        {{--<p>{{ $s->username }}</p>--}}
-                                    {{--</div>--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                        {{--@endforeach--}}
-                    </ul>
-                </div>
-            </aside>
             <div class="control-sidebar-bg"></div>
         </div>
         @section('footer-scripts')
