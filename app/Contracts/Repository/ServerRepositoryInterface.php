@@ -103,9 +103,10 @@ interface ServerRepositoryInterface extends RepositoryInterface, SearchableInter
      *
      * @param \Pterodactyl\Models\User $user
      * @param int                      $level
-     * @return \Illuminate\Pagination\LengthAwarePaginator
+     * @param bool                     $paginate
+     * @return \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection
      */
-    public function filterUserAccessServers(User $user, int $level): LengthAwarePaginator;
+    public function filterUserAccessServers(User $user, int $level, bool $paginate = true);
 
     /**
      * Return a server by UUID.
@@ -116,4 +117,32 @@ interface ServerRepositoryInterface extends RepositoryInterface, SearchableInter
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */
     public function getByUuid(string $uuid): Server;
+
+    /**
+     * Return all of the servers that should have a power action performed aganist them.
+     *
+     * @param int[] $servers
+     * @param int[] $nodes
+     * @param bool  $returnCount
+     * @return int|\Generator
+     */
+    public function getServersForPowerAction(array $servers = [], array $nodes = [], bool $returnCount = false);
+
+    /**
+     * Return the total number of servers that will be affected by the query.
+     *
+     * @param int[] $servers
+     * @param int[] $nodes
+     * @return int
+     */
+    public function getServersForPowerActionCount(array $servers = [], array $nodes = []): int;
+
+    /**
+     * Check if a given UUID and UUID-Short string are unique to a server.
+     *
+     * @param string $uuid
+     * @param string $short
+     * @return bool
+     */
+    public function isUniqueUuidCombo(string $uuid, string $short): bool;
 }

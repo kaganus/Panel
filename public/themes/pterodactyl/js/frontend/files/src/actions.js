@@ -284,7 +284,7 @@ class ActionsClass {
         swal({
             type: 'warning',
             title: '',
-            text: i18n.js.actions.delete_file_text1 + '<code>' + delName + '</code>' + i18n.js.actions.delete_file_text2,
+            text: i18n.js.actions.delete_file_text1 + '<code>' + delName + '</code>?',
             html: true,
             showCancelButton: true,
             showConfirmButton: true,
@@ -380,16 +380,22 @@ class ActionsClass {
         if (selectedItems.length != 0)
         {
             let formattedItems = "";
+            let i = 0;
             $.each(selectedItems, function(key, value) {
-              formattedItems += ("<code>" + value + "</code>, ");
-            })
+                formattedItems += ("<code>" + value + "</code>, ");
+                i++;
+                return i < 5;
+            });
 
             formattedItems = formattedItems.slice(0, -2);
+            if (selectedItems.length > 5) {
+                formattedItems += ', and ' + (selectedItems.length - 5) + ' other(s)';
+            }
 
             swal({
                 type: 'warning',
                 title: '',
-                text: i18n.js.actions.delete_file_text1 + formattedItems + i18n.js.actions.delete_file_text2,
+                text: i18n.js.actions.delete_file_text1 + formattedItems + '?',
                 html: true,
                 showCancelButton: true,
                 showConfirmButton: true,

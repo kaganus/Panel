@@ -97,7 +97,7 @@ return [
                 'title' => 'Send Console Command',
                 'description' => 'Allows sending a command from the console. If the user does not have stop or restart permissions they cannot send the application\'s stop command.',
             ],
-            'view_sftp' => [
+            'access_sftp' => [
                 'title' => 'SFTP Allowed',
                 'description' => 'Allows user to connect to the SFTP server provided by the daemon.',
             ],
@@ -217,6 +217,14 @@ return [
                 'title' => 'Reset Database Password',
                 'description' => 'Allows a user to reset passwords for databases.',
             ],
+            'delete_database' => [
+                'title' => 'Delete Databases',
+                'description' => 'Allows a user to delete databases for this server from the Panel.',
+            ],
+            'create_database' => [
+                'title' => 'Create Database',
+                'description' => 'Allows a user to create additional databases for this server.',
+            ],
         ],
         'delete' => [
             'title' => 'Delete Subuser',
@@ -239,8 +247,8 @@ return [
         'last_modified' => 'Last Modified',
         'add_new' => 'Add New File',
         'add_folder' => 'Add New Folder',
-        'mass_actions' => 'Mass actions',
-        'delete' => 'Delete',
+        'mass_actions' => 'Mass Actions',
+        'delete' => 'Delete Files',
         'edit' => [
             'header' => 'Edit File',
             'header_sub' => 'Make modifications to a file from the web.',
@@ -255,6 +263,11 @@ return [
         ],
     ],
     'config' => [
+        'name' => [
+            'header' => 'Server Name',
+            'header_sub' => 'Change this server\'s name.',
+            'details' => 'The server name is only a reference to this server on the panel, and will not affect any server specific configurations that may display to users in games.',
+        ],
         'startup' => [
             'header' => 'Start Configuration',
             'header_sub' => 'Control server startup arguments.',

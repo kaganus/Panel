@@ -64,6 +64,7 @@ class User extends Model implements
      * @var array
      */
     protected $fillable = [
+        'external_id',
         'username',
         'email',
         'name_first',
@@ -120,6 +121,7 @@ class User extends Model implements
      * @var array
      */
     protected $attributes = [
+        'external_id' => null,
         'root_admin' => false,
         'language' => 'en',
         'use_totp' => false,

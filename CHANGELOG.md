@@ -3,6 +3,100 @@ This file is a running track of new features and fixes to each version of the pa
 
 This project follows [Semantic Versioning](http://semver.org) guidelines.
 
+## v0.7.6 (Derelict Dermodactylus)
+### Fixed
+* Fixes a UI error when attempting to change the default Nest and Egg for an existing server.
+* Correct permissions check in UI to allow subusers with permission to `view-allocations` the ability to actually see the sidebar link.
+* Fixes improper behavior when marking an egg as copying the configuration from another.
+* Debug bar is only checked when the app is set to debug mode in the API session handler, rather than when it is in local mode to match the plugin settings.
+* Added validation to port allocations to prevent allocation of restricted or invalid ports.
+* Fix data integrity exception thrown when attempting to store updated server egg variables.
+* Added missing permissions check on 'SFTP Configuration' page to ensure user has permission to access a server's SFTP server before showing a user credentials.
+
+### Added
+* Added ability for end users to change the name of their server through the UI. This option is only open to the server owner or an admin.
+* Added giant warning message if you attempt to change an encryption key once one has been set.
+
+### Changed
+* Panel now throws proper 504: Gateway Timeout errors on server listing when daemon is offline.
+* Sessions handled through redis now use a seperate database (default `1`) to store session database to avoid logging users out when flushing the cache.
+* File manager UI improved to be clearer with buttons and cleaner on mobile.
+* reCAPTCHA's secret key position swapped with website key in advanced panel settings to be consistent with Google's reCAPTCHA dashboard.
+* Changed DisplayException to handle its own logging correctly and check if the previous exception is marked as one that should not be logged.
+* Changed 'New Folder' modal in file manager to include a trailing slash.
+
+## v0.7.5 (Derelict Dermodactylus)
+### Fixed
+* Fixes application API keys being created as a client API key.
+* Search term is now passed through when using paginated result sets.
+* Reduces the number of SQL queries executed when rendering the server listing to increase performance.
+* Fixes exceptions being thrown for non-existent subuser permissions.
+* Fixes exception caused when trying to revoke admin privileges from a user account due to a bad endpoint.
+
+### Changed
+* Databases are now properly paginated when viewing a database host.
+* No more loading daemon keys for every server model being loaded, some of us value our databases.
+* Changed behavior of the subuser middleware to add a daemon access key if one is missing from the database for some reason.
+* Server short-codes are now based on the UUID as they were in previous versions of Pterodactyl.
+
+## v0.7.4-h1 (Derelict Dermodactylus)
+### Fixed
+* Being able to create servers is kind of a core aspect of the software, pushing releases late at night is not a great idea.
+
+## v0.7.4 (Derelict Dermodactylus)
+### Fixed
+* Fixes a bug when reinstalling a server that would not mark the server as installing, resulting in some UI issues.
+* Handle 404 errors from missing models in the application API bindings correctly.
+* Fix validation error returned when no environment variables are passed, even if there are no variables required.
+* Fix improper permissions on `PATCH /api/servers/<id>/startup` endpoint which was preventing enditing any start variables.
+* Should fix migration issues from 0.6 when there are more than API key in the database.
+
+### Changed
+* Changes order that validation of resource existence occurs in API requests to not try and use a non-existent model when validating data.
+
+### Added
+* Adds back client API for sending commands or power toggles to a server though the Panel API: `/api/client/servers/<identifier>`
+* Added proper transformer for Packs and re-enabled missing includes on server.
+* Added support for using Filesystem as a caching driver, although not recommended.
+* Added support for user management of server databases.
+* **Added bulk power management CLI interface to send start, stop, kill, restart actions to servers across configurable nodes.**
+
+## v0.7.3 (Derelict Dermodactylus)
+### Fixed
+* Fixes server creation API endpoint not passing the provided `external_id` to the creation service.
+* Fixes a bug causing users to be un-editable on new installations once more than one user exists.
+* Fixes default order of buttons in certain parts of the panel that would default to 'Delete' rather than 'Save' when pressing enter.
+
+### Added
+* Adds ability to modify the external ID for a server through the API.
+
+## v0.7.2 (Derelict Dermodactylus)
+### Fixed
+* Fixes an exception thrown when trying to access the `/nests/:id/eggs/:id` API endpoint.
+* Fixes search on server listing page.
+* Schedules with no names are now clickable to allow editing.
+* Fixes broken permissions check that would deny access to API keys that did in fact have permission.
+
+### Added
+* Adds ability to include egg variables on an API request.
+* Added `external_id` column to servers that allows for easier linking with external services such as WHMCS.
+* Added back the sidebar when viewing servers that allows for quick-switching to a different server.
+* Added API endpoint to get a server by external ID.
+
+## v0.7.1 (Derelict Dermodactylus)
+### Fixed
+* Fixes an exception when no token is entered on the 2-Factor enable/disable page and the form is submitted.
+* Fixes an exception when trying to perform actions aganist a User model due to a validator that could not be cast to a string correctly.
+* Allow FQDNs in database host creation UI correctly.
+* Fixes database naming scheme using `d###_` rather than `s###_` when creating server databases.
+* Fix exception thrown when attempting to update an existing database host.
+
+### Changed
+* Adjusted exception handler behavior to log more stack information for PDO exceptions while not exposing credentials.
+
+### Added
+* Very basic cache busting until asset management can be changed to make use of better systems.
+
 ## v0.7.0 (Derelict Dermodactylus)
 ### Fixed
 * `[rc.2]` — Fixes bad API behavior on `/user` routes.

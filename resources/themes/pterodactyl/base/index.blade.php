@@ -53,10 +53,10 @@
                             <tr class="dynamic-update" data-server="{{ $server->uuidShort }}">
                                 @if(Auth::user()->root_admin)
                                     <td @if(! empty($server->description)) rowspan="2" @endif><code>{{ $server->uuidShort }}</code></td>
-                                    <td>{{ $server->node->name }}</td>
+                                    <td>{{ $server->getRelation('node')->name }}</td>
                                 @endif
                                 <td><a href="{{ route('server.index', $server->uuidShort) }}">{{ $server->name }}</a></td>
-                                <td><code>{{ $server->allocation->alias }}:{{ $server->allocation->port }}</code></td>
+                                <td><code>{{ $server->getRelation('allocation')->alias }}:{{ $server->getRelation('allocation')->port }}</code></td>
                                 <td class="text-center hidden-sm hidden-xs"><span data-action="memory">--</span> / {{ $server->memory === 0 ? '&infin;' : $server->memory }} MB</td>
                                 <td class="text-center hidden-sm hidden-xs"><span data-action="cpu" data-cpumax="{{ $server->cpu }}">--</span> %</td>
                                 <td class="text-center">
@@ -83,7 +83,7 @@
             </div>
             @if($servers->hasPages())
                 <div class="box-footer">
-                    <div class="col-md-12 text-center">{!! $servers->render() !!}</div>
+                    <div class="col-md-12 text-center">{!! $servers->appends(['query' => Request::input('query')])->render() !!}</div>
                 </div>
             @endif
         </div>

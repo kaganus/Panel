@@ -19,11 +19,12 @@ Route::get('/console', 'ConsoleController@console')->name('server.console');
 */
 Route::group(['prefix' => 'settings'], function () {
     Route::get('/allocation', 'Settings\AllocationController@index')->name('server.settings.allocation');
-    Route::patch('/allocation', 'Settings\AllocationController@update');
-
+    Route::get('/name', 'Settings\NameController@index')->name('server.settings.name');
     Route::get('/sftp', 'Settings\SftpController@index')->name('server.settings.sftp');
-
     Route::get('/startup', 'Settings\StartupController@index')->name('server.settings.startup');
+
+    Route::patch('/allocation', 'Settings\AllocationController@update');
+    Route::patch('/name', 'Settings\NameController@update');
     Route::patch('/startup', 'Settings\StartupController@update');
 });
 
@@ -38,7 +39,11 @@ Route::group(['prefix' => 'settings'], function () {
 Route::group(['prefix' => 'databases'], function () {
     Route::get('/', 'DatabaseController@index')->name('server.databases.index');
 
+    Route::post('/new', 'DatabaseController@store')->name('server.databases.new');
+
     Route::patch('/password', 'DatabaseController@update')->middleware('server..database')->name('server.databases.password');
+
+    Route::delete('/delete/{database}', 'DatabaseController@delete')->middleware('server..database')->name('server.databases.delete');
 });
 
 /*

@@ -3,15 +3,23 @@
 namespace Pterodactyl\Http\Requests\Api\Application;
 
 use Pterodactyl\Models\ApiKey;
-use Illuminate\Database\Eloquent\Model;
 use Pterodactyl\Services\Acl\Api\AdminAcl;
 use Illuminate\Foundation\Http\FormRequest;
 use Pterodactyl\Exceptions\PterodactylException;
 use Pterodactyl\Http\Middleware\Api\ApiSubstituteBindings;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 abstract class ApplicationApiRequest extends FormRequest
 {
+    /**
+     * Tracks if the request has been validated internally or not to avoid
+     * making duplicate validation calls.
+     *
+     * @var bool
+     */
+    private $hasValidated = false;
+
     /**
      * The resource that should be checked when performing the authorization
      * function for this request.
@@ -76,22 +84,38 @@ abstract class ApplicationApiRequest extends FormRequest
     }
 
     /**
-     * Grab a model from the route parameters. If no model exists under
-     * the specified key a default response is returned.
+     * Grab a model from the route parameters. If no model is found in the
+     * binding mappings an exception will be thrown.
      *
      * @param string $model
-     * @param mixed  $default
      * @return mixed
+     *
+     * @throws \Symfony\Component\Routing\Exception\InvalidParameterException
      */
-    public function getModel(string $model, $default = null)
+    public function getModel(string $model)
     {
         $parameterKey = array_get(array_flip(ApiSubstituteBindings::getMappings()), $model);
 
-        if (! is_null($parameterKey)) {
-            $model = $this->route()->parameter($parameterKey);
+        if (is_null($parameterKey)) {
+            throw new InvalidParameterException;
         }
 
-        return $model ?? $default;
+        return $this->route()->parameter($parameterKey);
+    }
+
+    /**
+     * Validate that the resource exists and can be accessed prior to booting
+     * the validator and attempting to use the data.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    protected function prepareForValidation()
+    {
+        if (! $this->passesAuthorization()) {
+            $this->failedAuthorization();
+        }
+
+        $this->hasValidated = true;
     }
 
     /*
@@ -108,6 +132,14 @@ abstract class ApplicationApiRequest extends FormRequest
      */
     protected function passesAuthorization()
     {
+        // If we have already validated we do not need to call this function
+        // again. This is needed to work around Laravel's normal auth validation
+        // that occurs after validating the request params since we are doing auth
+        // validation in the prepareForValidation() function.
+        if ($this->hasValidated) {
+            return true;
+        }
+
         if (! parent::passesAuthorization()) {
             return false;
         }

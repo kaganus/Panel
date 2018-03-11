@@ -16,12 +16,12 @@ class SftpController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\View\View
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Request $request): View
     {
-        $server = $request->attributes->get('server');
-        $this->authorize('view-sftp', $server);
-
+        $this->authorize('access-sftp', $request->attributes->get('server'));
         $this->setRequest($request)->injectJavascript();
 
         return view('server.settings.sftp');

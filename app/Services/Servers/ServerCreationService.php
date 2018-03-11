@@ -210,9 +210,12 @@ class ServerCreationService
      */
     private function createModel(array $data): Server
     {
+        $uuid = $this->generateUniqueUuidCombo();
+
         return $this->repository->create([
-            'uuid' => Uuid::uuid4()->toString(),
-            'uuidShort' => str_random(8),
+            'external_id' => array_get($data, 'external_id'),
+            'uuid' => $uuid,
+            'uuidShort' => substr($uuid, 0, 8),
             'node_id' => array_get($data, 'node_id'),
             'name' => array_get($data, 'name'),
             'description' => array_get($data, 'description') ?? '',
@@ -232,6 +235,8 @@ class ServerCreationService
             'startup' => array_get($data, 'startup'),
             'daemonSecret' => str_random(Node::DAEMON_SECRET_LENGTH),
             'image' => array_get($data, 'image'),
+            'database_limit' => array_get($data, 'database_limit'),
+            'allocation_limit' => array_get($data, 'allocation_limit'),
         ]);
     }
 
@@ -285,5 +290,21 @@ class ServerCreationService
         $allocation = $this->allocationRepository->setColumns(['id', 'node_id'])->find($allocation);
 
         return $allocation->node_id;
+    }
+
+    /**
+     * Create a unique UUID and UUID-Short combo for a server.
+     *
+     * @return string
+     */
+    private function generateUniqueUuidCombo(): string
+    {
+        $uuid = Uuid::uuid4()->toString();
+
+        if (! $this->repository->isUniqueUuidCombo($uuid, substr($uuid, 0, 8))) {
+            return $this->generateUniqueUuidCombo();
+        }
+
+        return $uuid;
     }
 }

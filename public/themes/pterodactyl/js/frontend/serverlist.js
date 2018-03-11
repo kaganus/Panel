@@ -80,8 +80,11 @@
                 }
             }
         }).fail(function (jqXHR) {
-            console.error(jqXHR);
-            element.find('[data-action="status"]').html('<span class="label label-default">' + i18n.js.serverlist.error + '</span>');
+            if (jqXHR.status === 504) {
+                element.find('[data-action="status"]').html('<span class="label label-default">Gateway Timeout</span>');
+            } else {
+                element.find('[data-action="status"]').html('<span class="label label-default">' + i18n.js.serverlist.error + '</span>');
+            }
         });
     }).promise().done(function () {
         setTimeout(updateServerStatus, 10000);

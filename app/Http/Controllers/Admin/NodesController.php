@@ -331,7 +331,10 @@ class NodesController extends Controller
      * @param int|\Pterodactyl\Models\Node                                $node
      * @return \Illuminate\Http\RedirectResponse
      *
-     * @throws \Pterodactyl\Exceptions\DisplayException
+     * @throws \Pterodactyl\Exceptions\Service\Allocation\CidrOutOfRangeException
+     * @throws \Pterodactyl\Exceptions\Service\Allocation\InvalidPortMappingException
+     * @throws \Pterodactyl\Exceptions\Service\Allocation\PortOutOfRangeException
+     * @throws \Pterodactyl\Exceptions\Service\Allocation\TooManyPortsInRangeException
      */
     public function createAllocation(AllocationFormRequest $request, Node $node)
     {
@@ -366,7 +369,7 @@ class NodesController extends Controller
     public function setToken(Node $node)
     {
         $token = bin2hex(random_bytes(16));
-        $this->cache->tags(['Node:Configuration'])->put($token, $node->id, 5);
+        $this->cache->put('Node:Configuration:' . $token, $node->id, 5);
 
         return response()->json(['token' => $token]);
     }
