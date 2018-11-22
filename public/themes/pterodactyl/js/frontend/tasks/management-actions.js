@@ -93,7 +93,7 @@ $(document).ready(function () {
                 swal({
                     type: 'error',
                     title: 'Whoops!',
-                    text: 'An error occured while attempting to trigger this schedule.'
+                    text: 'An error occurred while attempting to trigger this schedule.'
                 });
             });
         });

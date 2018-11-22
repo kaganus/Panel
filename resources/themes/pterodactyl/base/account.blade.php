@@ -64,7 +64,7 @@
                 <div class="box box-primary">
                     <form action="{{ route('account') }}" method="POST">
                         <div class="box-header with-border">
-                            <h3 class="box-title">@lang('base.account.update_identitity')</h3>
+                            <h3 class="box-title">@lang('base.account.update_identity')</h3>
                         </div>
                         <div class="box-body">
                             <div class="row">
@@ -90,11 +90,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <label for="language" class="control-label">@lang('base.account.language')</label>
+                                    <div>
+                                        <select name="language" id="language" class="form-control">
+                                            @foreach($languages as $key => $value)
+                                                <option value="{{ $key }}" {{ Auth::user()->language !== $key ?: 'selected' }}>{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="box-footer with-border">
                             {!! csrf_field() !!}
                             <input type="hidden" name="do_action" value="identity" />
-                            <button type="submit" class="btn btn-sm btn-primary">@lang('base.account.update_identitity')</button>
+                            <button type="submit" class="btn btn-sm btn-primary">@lang('base.account.update_identity')</button>
                         </div>
                     </form>
                 </div>

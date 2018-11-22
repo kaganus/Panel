@@ -87,7 +87,7 @@
                 @if($overLimit)
                     <div class="box-body">
                         <div class="alert alert-danger no-margin">
-                            You are currently using <strong>{{ count($databases) }}</strong> of your <strong>{{ $server->database_limit ?? '&infin;' }}</strong> allowed databases.
+                            You are currently using <strong>{{ count($databases) }}</strong> of your <strong>{{ $server->database_limit ?? '∞' }}</strong> allowed databases.
                         </div>
                     </div>
                 @else
@@ -148,7 +148,7 @@
                     block.parent().parent().find('[data-attr="set-password"]').html(data.password);
                 }).fail(function(jqXHR) {
                     console.error(jqXHR);
-                    var error = 'An error occured while trying to process this request.';
+                    var error = 'An error occurred while trying to process this request.';
                     if (typeof jqXHR.responseJSON !== 'undefined' && typeof jqXHR.responseJSON.error !== 'undefined') {
                         error = jqXHR.responseJSON.error;
                     }
@@ -188,7 +188,7 @@
                         swal({
                             type: 'error',
                             title: 'Whoops!',
-                            text: (typeof jqXHR.responseJSON.error !== 'undefined') ? jqXHR.responseJSON.error : 'An error occured while processing this request.'
+                            text: (typeof jqXHR.responseJSON.error !== 'undefined') ? jqXHR.responseJSON.error : 'An error occurred while processing this request.'
                         });
                     });
                 });

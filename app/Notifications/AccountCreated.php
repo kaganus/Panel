@@ -23,7 +23,7 @@ class AccountCreated extends Notification implements ShouldQueue
     /**
      * The user model for the created user.
      *
-     * @var object
+     * @var \Pterodactyl\Models\User
      */
     public $user;
 
@@ -66,7 +66,7 @@ class AccountCreated extends Notification implements ShouldQueue
             ->line(trans('email.common.email') . $this->user->email);
 
         if (! is_null($this->token)) {
-            return $message->action(trans('email.account_created.link'), url('/auth/password/reset/' . $this->token . '?email=' . $this->user->email));
+            return $message->action(trans('email.account_created.link'), url('/auth/password/reset/' . $this->token . '?email=' . urlencode($this->user->email)));
         }
 
         return $message;

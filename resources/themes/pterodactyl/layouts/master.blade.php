@@ -44,7 +44,8 @@
         <div class="wrapper">
             <header class="main-header">
                 <a href="{{ route('index') }}" class="logo">
-                    <span>{{ config('app.name', 'Pterodactyl') }}</span>
+                    <span class="logo-lg">{{ config('app.name', 'Pterodactyl') }}</span>
+                    <span class="logo-mini"><img src="/favicons/android-chrome-192x192.png"></span>
                 </a>
                 <nav class="navbar navbar-static-top">
                     <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
@@ -168,7 +169,7 @@
                                     </a>
                                 </li>
                             @endcan
-                            @can('list-tasks', $server)
+                            @can('list-schedules', $server)
                                 <li
                                     @if(starts_with(Route::currentRouteName(), 'server.schedules'))
                                         class="active"
@@ -308,9 +309,6 @@
             {!! Theme::js('vendor/socketio/socket.io.v203.min.js?t={cache-version}') !!}
             {!! Theme::js('vendor/bootstrap-notify/bootstrap-notify.min.js?t={cache-version}') !!}
             {!! Theme::js('js/autocomplete.js?t={cache-version}') !!}
-            @if(config('pterodactyl.lang.in_context'))
-                {!! Theme::js('vendor/phraseapp/phraseapp.js?t={cache-version}') !!}
-            @endif
 
             @if(Auth::user()->root_admin)
                 <script>

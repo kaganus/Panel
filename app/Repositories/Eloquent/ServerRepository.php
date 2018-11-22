@@ -211,10 +211,10 @@ class ServerRepository extends EloquentRepository implements ServerRepositoryInt
      *
      * @param \Pterodactyl\Models\User $user
      * @param int                      $level
-     * @param bool                     $paginate
+     * @param bool|int                 $paginate
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection
      */
-    public function filterUserAccessServers(User $user, int $level, bool $paginate = true)
+    public function filterUserAccessServers(User $user, int $level, $paginate = 25)
     {
         $instance = $this->getBuilder()->select($this->getColumns())->with(['user', 'node', 'allocation']);
 
@@ -240,7 +240,7 @@ class ServerRepository extends EloquentRepository implements ServerRepositoryInt
 
         $instance->search($this->getSearchTerm());
 
-        return $paginate ? $instance->paginate(25) : $instance->get();
+        return $paginate ? $instance->paginate($paginate) : $instance->get();
     }
 
     /**
@@ -265,7 +265,7 @@ class ServerRepository extends EloquentRepository implements ServerRepositoryInt
     }
 
     /**
-     * Return all of the servers that should have a power action performed aganist them.
+     * Return all of the servers that should have a power action performed against them.
      *
      * @param int[] $servers
      * @param int[] $nodes
@@ -327,5 +327,15 @@ class ServerRepository extends EloquentRepository implements ServerRepositoryInt
         return $this->getBuilder()->select('id')->where('owner_id', $user)->union(
             $this->app->make(SubuserRepository::class)->getBuilder()->select('server_id')->where('user_id', $user)
         )->pluck('id')->all();
+    }
+
+    /**
+     * Get the amount of servers that are suspended.
+     *
+     * @return int
+     */
+    public function getSuspendedServersCount(): int
+    {
+        return $this->getBuilder()->where('suspended', true)->count();
     }
 }

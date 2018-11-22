@@ -1,15 +1,7 @@
 <?php
-/**
- * Pterodactyl - Panel
- * Copyright (c) 2015 - 2017 Dane Everitt <dane@daneeveritt.com>.
- *
- * This software is licensed under the terms of the MIT license.
- * https://opensource.org/licenses/MIT
- */
 
 namespace Tests\Unit\Services\Nodes;
 
-use Exception;
 use Mockery as m;
 use Tests\TestCase;
 use phpmock\phpunit\PHPMock;
@@ -64,17 +56,17 @@ class NodeUpdateServiceTest extends TestCase
             ->expects($this->once())->willReturn('random_string');
 
         $this->connection->shouldReceive('beginTransaction')->withNoArgs()->once()->andReturnNull();
-        $this->repository->shouldReceive('withoutFreshModel->update')->with($model->id, [
+        $this->repository->shouldReceive('update')->with($model->id, [
             'name' => 'NewName',
             'daemonSecret' => 'random_string',
-        ])->andReturn(true);
+        ])->andReturn($model);
 
         $this->configRepository->shouldReceive('setNode')->with($model)->once()->andReturnSelf()
             ->shouldReceive('update')->withNoArgs()->once()->andReturn(new Response);
         $this->connection->shouldReceive('commit')->withNoArgs()->once()->andReturnNull();
 
-        $response = $this->getService()->returnUpdatedModel(false)->handle($model, ['name' => 'NewName', 'reset_secret' => true]);
-        $this->assertTrue($response);
+        $response = $this->getService()->handle($model, ['name' => 'NewName', 'reset_secret' => true]);
+        $this->assertInstanceOf(Node::class, $response);
     }
 
     /**
@@ -85,36 +77,16 @@ class NodeUpdateServiceTest extends TestCase
         $model = factory(Node::class)->make();
 
         $this->connection->shouldReceive('beginTransaction')->withNoArgs()->once()->andReturnNull();
-        $this->repository->shouldReceive('withoutFreshModel->update')->with($model->id, [
-            'name' => 'NewName',
-        ])->andReturn(true);
-
-        $this->configRepository->shouldReceive('setNode')->with($model)->once()->andReturnSelf()
-            ->shouldReceive('update')->withNoArgs()->once()->andReturn(new Response);
-        $this->connection->shouldReceive('commit')->withNoArgs()->once()->andReturnNull();
-
-        $response = $this->getService()->returnUpdatedModel(false)->handle($model, ['name' => 'NewName']);
-        $this->assertTrue($response);
-    }
-
-    public function testUpdatedModelIsReturned()
-    {
-        $model = factory(Node::class)->make();
-        $updated = clone $model;
-        $updated->name = 'NewName';
-
-        $this->connection->shouldReceive('beginTransaction')->withNoArgs()->once()->andReturnNull();
         $this->repository->shouldReceive('update')->with($model->id, [
-            'name' => $updated->name,
-        ])->andReturn($updated);
+            'name' => 'NewName',
+        ])->andReturn($model);
 
         $this->configRepository->shouldReceive('setNode')->with($model)->once()->andReturnSelf()
             ->shouldReceive('update')->withNoArgs()->once()->andReturn(new Response);
         $this->connection->shouldReceive('commit')->withNoArgs()->once()->andReturnNull();
 
-        $response = $this->getService()->returnUpdatedModel()->handle($model, ['name' => $updated->name]);
+        $response = $this->getService()->handle($model, ['name' => 'NewName']);
         $this->assertInstanceOf(Node::class, $response);
-        $this->assertSame($updated, $response);
     }
 
     /**
@@ -128,7 +100,7 @@ class NodeUpdateServiceTest extends TestCase
         $model = factory(Node::class)->make();
 
         $this->connection->shouldReceive('beginTransaction')->withNoArgs()->once()->andReturnNull();
-        $this->repository->shouldReceive('withoutFreshModel->update')->andReturn(new Response);
+        $this->repository->shouldReceive('update')->andReturn($model);
 
         $this->configRepository->shouldReceive('setNode->update')->once()->andThrow($this->getExceptionMock());
         $this->connection->shouldReceive('commit')->withNoArgs()->once()->andReturnNull();
@@ -147,7 +119,7 @@ class NodeUpdateServiceTest extends TestCase
         $model = factory(Node::class)->make();
 
         $this->connection->shouldReceive('beginTransaction')->withNoArgs()->once()->andReturnNull();
-        $this->repository->shouldReceive('withoutFreshModel->update')->andReturn(new Response);
+        $this->repository->shouldReceive('update')->andReturn($model);
 
         $this->configRepository->shouldReceive('setNode->update')->once()->andThrow($this->getExceptionMock());
 

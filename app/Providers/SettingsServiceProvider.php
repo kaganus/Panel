@@ -2,7 +2,7 @@
 
 namespace Pterodactyl\Providers;
 
-use Illuminate\Contracts\Logging\Log;
+use Psr\Log\LoggerInterface as Log;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Encryption\Encrypter;
@@ -62,7 +62,7 @@ class SettingsServiceProvider extends ServiceProvider
      *
      * @param \Illuminate\Contracts\Config\Repository                       $config
      * @param \Illuminate\Contracts\Encryption\Encrypter                    $encrypter
-     * @param \Illuminate\Contracts\Logging\Log                             $log
+     * @param \Psr\Log\LoggerInterface                                      $log
      * @param \Pterodactyl\Contracts\Repository\SettingsRepositoryInterface $settings
      */
     public function boot(ConfigRepository $config, Encrypter $encrypter, Log $log, SettingsRepositoryInterface $settings)
@@ -78,7 +78,7 @@ class SettingsServiceProvider extends ServiceProvider
                 return [$setting->key => $setting->value];
             })->toArray();
         } catch (QueryException $exception) {
-            $log->notice('A query exception was encountered while trying to load settings from the database.');
+            $log->notice('A query exception was encountered while trying to load settings from the database: ' . $exception->getMessage());
 
             return;
         }
