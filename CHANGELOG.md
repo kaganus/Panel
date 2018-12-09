@@ -3,6 +3,18 @@ This file is a running track of new features and fixes to each version of the pa
 
 This project follows [Semantic Versioning](http://semver.org) guidelines.
 
+## v0.7.12 (Derelict Dermodactylus)
+### Fixed
+* Fixes an issue with the locations API endpoint referencing an invalid namespace.
+* Fixes the `store()` function on the locations API not working due to an incorrect return typehint.
+* Fixes daemon secrets not being able to be reset on a Node.
+ 
+### Updated
+* Upgraded core to use Laravel `5.7.14`.
+
+### Added
+* Added support for opening and editing Python files through the web editor.
+
 ## v0.7.11 (Derelict Dermodactylus)
 ### Fixed
 * Fixes an issue with certain systems not handling an API folder that was named `API` but referenced as `Api` in the namespace.
