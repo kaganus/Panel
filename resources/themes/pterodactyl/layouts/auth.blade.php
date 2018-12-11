@@ -19,7 +19,7 @@
         <link rel="shortcut icon" href="/favicons/favicon.ico">
         <meta name="msapplication-config" content="/favicons/browserconfig.xml">
         <meta name="theme-color" content="#3498db">
-        <script src="/js/lang/{{ config('app.locale') }}.js"></script>
+        <!-- script src="/js/lang/{{ config('app.locale') }}.js"></script -->
 
         @section('scripts')
             {!! Theme::css('vendor/bootstrap/bootstrap.min.css?t={cache-version}') !!}
