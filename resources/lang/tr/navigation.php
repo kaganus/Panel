@@ -29,5 +29,6 @@ return [
         'edit_file' => 'Dosya Düzenle',
         'admin_header' => 'YÖNETİMSEL',
         'admin' => 'Sunucu Konfigürasyonu',
+        'server_name' => 'Sunucu Adı',
     ],
 ];
