@@ -29,6 +29,10 @@ class ActionsClass {
         this.element = undefined;
     }
 
+    sanitizedString(value) {
+        return $('<div>').text(value).html();
+    }
+
     folder(path) {
         let inputValue
         if (path) {
@@ -296,7 +300,7 @@ class ActionsClass {
         swal({
             type: 'warning',
             title: '',
-            text: i18n.js.actions.delete_file_text1 + '<code>' + delName + '</code>?',
+            text: i18n.js.actions.delete_file_text1 + '<code>' + this.sanitizedString(delName) + '</code>?',
             html: true,
             showCancelButton: true,
             showConfirmButton: true,
@@ -394,7 +398,7 @@ class ActionsClass {
             let formattedItems = "";
             let i = 0;
             $.each(selectedItems, function(key, value) {
-                formattedItems += ("<code>" + value + "</code>, ");
+                formattedItems += ("<code>" + this.sanitizedString(value) + "</code>, ");
                 i++;
                 return i < 5;
             });
@@ -407,7 +411,7 @@ class ActionsClass {
             swal({
                 type: 'warning',
                 title: '',
-                text: i18n.js.actions.delete_file_text1 + formattedItems + '?',
+                text: i18n.js.actions.delete_file_text1 + this.sanitizedString(formattedItems) + '?',
                 html: true,
                 showCancelButton: true,
                 showConfirmButton: true,
@@ -536,7 +540,7 @@ class ActionsClass {
                 type: 'error',
                 title: i18n.js.common.whoops,
                 html: true,
-                text: error
+                text: this.sanitizedString(error)
             });
         });
     }
